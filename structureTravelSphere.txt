@@ -1,0 +1,41 @@
+D:.
+
+├───backend
+
+│   ├───config
+
+│   ├───controllers
+
+│   ├───middleware
+
+│   ├───models
+
+│   ├───routes
+
+│   └───uploads
+
+│       ├───destinations
+
+│       └───profile_pics
+
+└───frontend
+
+    ├───public
+
+    │   └───images
+
+    └───src
+
+        ├───assets
+
+        │   ├───css
+
+        │   ├───images
+
+        │   └───videos
+
+        ├───components
+
+        ├───pages
+
+        └───services
