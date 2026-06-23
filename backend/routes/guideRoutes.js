@@ -22,6 +22,14 @@ router.post(
     { name: "idProofImage", maxCount: 1 },
     { name: "selfieImage", maxCount: 1 }
   ]),
+  async (req, res, next) => {
+    // Delete any existing rejected application before proceeding
+    await GuideApplication.findOneAndDelete({
+      userId: req.user._id,
+      status: "rejected"
+    });
+    next(); // passes to applyGuide controller
+  },
   applyGuide
 );
 
