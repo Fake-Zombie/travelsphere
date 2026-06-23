@@ -1,0 +1,151 @@
+.modern-dest-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--bg-2);
+  transition: transform var(--transition);
+}
+
+.modern-dest-card:hover {
+  transform: scale(1.02);
+}
+
+/* Background Image Handling */
+.dest-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+  filter: brightness(0.9);
+}
+
+.modern-dest-card:hover .dest-bg-image {
+  transform: scale(1.1);
+  filter: brightness(0.95);
+}
+
+.dest-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 60%,
+    rgba(0,0,0,0.15) 100%
+  );
+  z-index: 1;
+}
+
+/* Top UI Elements */
+.dest-top-ui {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+}
+
+.dest-rating {
+  color: var(--gold);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.6));
+  transition: var(--transition);
+}
+
+.dest-rating:hover {
+  color: var(--gold);
+  transform: scale(1.25);
+  text-shadow: 0 0 20px rgba(245,200,66,0.9), 0 0 40px rgba(245,200,66,0.4), 0 1px 6px rgba(0,0,0,0.8);
+  filter: drop-shadow(0 0 8px rgba(245,200,66,0.6));
+}
+
+.dest-fav-btn {
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+}
+
+.dest-fav-btn:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+}
+
+.dest-fav-btn.active {
+  transform: scale(1.1);
+  filter: drop-shadow(0 2px 8px rgba(220, 50, 50, 0.5));
+}
+/* Bottom Text Content */
+.dest-details {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 2;
+  color: var(--text);
+  transition: transform 0.3s ease;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.dest-country-tag {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: white;
+  opacity: 1;
+  margin-bottom: 6px;
+  display: block;
+  font-weight: 100;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+.modern-dest-card .dest-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: white ;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
+
+.dest-explore-btn {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: var(--transition);
+  color: black;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  padding: 0;
+}
+
+.dest-explore-btn:hover {
+  color: white;
+}
+
+/* Hover effect to show the explore button */
+.modern-dest-card:hover .dest-explore-btn {
+  opacity: 1;
+  transform: translateY(0);
+}

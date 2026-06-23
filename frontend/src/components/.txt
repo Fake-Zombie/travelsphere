@@ -1,0 +1,884 @@
+auto e-mail notification system
+
+
+start work when admin clicks verify payment
+on clicking ive paid via google pay, make the page say thanks with a modal not an error mossage from browser
+##admin verified and its showing on varified tab bu also showing in pending tab
+##and where can the guide see the pending payment thing
+
+
+
+work on the posts section and post handling.
+
+
+
+
+1:03 PM
+Perfect! The timeSpent field ALREADY EXISTS in the traveler's completion form!
+
+Look at lines 75-110 in CompletionConfirmModal.jsx:
+
+javascript
+<div className="form-group">
+  <label>Time Spent (Hours) *</label>
+  <input
+    type="number"
+    name="timeSpent"
+    value={formData.timeSpent}
+    onChange={handleChange}
+    placeholder="0.0"
+    step="0.5"
+    min="0"
+    className={`form-input ${errors.timeSpent ? 'error' : ''}`}
+  />
+  {/* Quick buttons for 4h, 8h, 12h, 24h, 2 days */}
+So the real issue is: Travelers ARE submitting timeSpent, but it's not being saved to the backend.
+
+Check your booking completion backend endpoint:
+
+Can you share the endpoint that handles traveler's completion submission? It's likely:
+
+POST /api/booking/:id/confirm-completion or
+PUT /api/booking/:id/complete or similar
+The problem is probably that when the traveler submits the form in CompletionConfirmModal, the backend isn't properly saving timeSpent to booking.completionDetails.timeSpent.
+
+To verify: Open your browser DevTools → Network tab → submit a completion form → check the request payload. Does it include timeSpent? If yes, check the backend response to see if it was saved.
+
+Share the backend endpoint handler and I'll fix it there.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const mongoose = require('mongoose');
+
+const bookingSchema = new mongoose.Schema(
+  {
+    guideId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'GuideApplication',
+      required: true
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    destinationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Destination',
+      required: true
+    },
+    startDate: {
+      type: Date,
+      required: true
+    },
+    endDate: {
+      type: Date,
+      required: true
+    },
+    partySize: {
+      type: Number,
+      required: true,
+      min: 1
+    },
+    budgetRange: {
+      min: {
+        type: Number,
+        default: 0
+      },
+      max: {
+        type: Number,
+        default: 0
+      }
+    },
+    notes: {
+      type: String,
+      default: ''
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'accepted', 'rejected', 'completed'],
+      default: 'pending'
+    },
+    // Guide approval/rejection messages
+    approvalMessage: {
+      type: String,
+      default: ''
+    },
+    rejectionReason: {
+      type: String,
+      default: ''
+    },
+    // Counter offer from guide
+    counterOffer: {
+      suggestedDates: {
+        start: Date,
+        end: Date
+      },
+      suggestedPrice: {
+        min: Number,
+        max: Number
+      },
+      message: String
+    },
+    // Counter offer response from user
+    counterOfferAccepted: {
+      type: Boolean,
+      default: false
+    },
+    counterOfferRejected: {
+      type: Boolean,
+      default: false
+    },
+    counterOfferRejectionReason: {
+      type: String,
+      default: ''
+    },
+    // Booking completion workflow
+    completionRequested: {
+      type: Boolean,
+      default: false
+    },
+    completionRequestedAt: {
+      type: Date,
+      default: null
+    },
+    completionDetails: {
+      paymentMethod: {
+        type: String,
+        enum: ['cash', 'card', 'other'],
+        default: null
+      },
+      amountPaid: {
+        type: Number,
+        default: 0
+      },
+      timeSpent: {
+        type: Number,
+        default: 0
+      }, // in hours
+      currency: {
+        type: String,
+        default: 'USD'
+      },
+      guideRating: {
+        rating: { type: Number, min: 1, max: 5 },
+        comment: String,
+        ratedAt: Date,
+        ratedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+      },
+      feedback: {
+        type: String,
+        default: ''
+      },
+      travelersNotes: {
+        type: String,
+        default: ''
+      },
+      confirmationDate: {
+        type: Date,
+        default: null
+      }
+    },
+    completedAt: {
+      type: Date,
+      default: null
+    },
+    // Payment request (20% of amountPaid from completionDetails)
+    paymentRequest: {
+  status: {
+    type: String,
+    enum: ['pending', 'submitted', 'paid', 'rejected'],  // ✅ Added 'submitted'
+    default: 'pending'
+  },
+  amount: {
+    type: Number,
+    default: 0
+  },
+  currency: {
+    type: String,
+    default: 'INR'
+  },
+  createdAt: {
+    type: Date,
+    default: null
+  },
+  submittedAt: {
+    type: Date,
+    default: null
+  },
+  paidAt: {
+    type: Date,
+    default: null
+  },
+  proofId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'PaymentProof',
+    default: null
+  },
+  verifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
+  adminNotes: {
+    type: String,
+    default: ''
+  }
+}
+  },
+  { timestamps: true }
+);
+
+// Index for faster queries
+bookingSchema.index({ userId: 1, createdAt: -1 });
+bookingSchema.index({ guideId: 1, createdAt: -1 });
+bookingSchema.index({ status: 1 });
+bookingSchema.index({ 'paymentRequest.status': 1 });
+
+const Booking = mongoose.model('Booking', bookingSchema);
+
+module.exports = Booking;const mongoose = require("mongoose");
+
+const BookingChatSchema = new mongoose.Schema(
+  {
+    bookingId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking",
+      required: true,
+    },
+    senderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    receiverId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    message: {
+      type: String,
+      default: "",
+    },
+    phoneNumber: {
+      type: String,
+      default: null,
+    },
+    isPhoneShare: {
+      type: Boolean,
+      default: false, // true if this message is just a phone number share
+    },
+    read: {
+      type: Boolean,
+      default: false,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("BookingChat", BookingChatSchema);const mongoose = require("mongoose");
+
+const companionSchema = new mongoose.Schema(
+  {
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    receiver: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "accepted", "rejected"],
+      default: "pending",
+    },
+  },
+  { timestamps: true }
+);
+
+// Prevent duplicate requests
+companionSchema.index({ sender: 1, receiver: 1 }, { unique: true });
+
+module.exports = mongoose.model("Companion", companionSchema);const mongoose = require("mongoose");
+
+const conversationSchema = new mongoose.Schema(
+  {
+    participants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+    ],
+    lastMessage: {
+      type: String,
+      default: "",
+    },
+    lastMessageAt: {
+      type: Date,
+      default: null,
+    },
+  },
+  { timestamps: true }
+);
+
+// Prevent duplicate conversations between same two users
+conversationSchema.index({ participants: 1 });
+
+module.exports = mongoose.model("Conversation", conversationSchema);const mongoose = require("mongoose");
+
+const destinationSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+    },
+
+    country: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    description: {
+      type: String,
+      required: true,
+    },
+
+    image: {
+      type: String,
+      required: true,
+    },
+
+    avgRating: {
+      type: Number,
+      default: 0,
+    },
+
+    totalRatings: {
+      type: Number,
+      default: 0,
+    },
+
+    favoritesCount: {
+      type: Number,
+      default: 0,
+    },
+
+    type: {
+      type: String,
+      default: "Other",
+    },
+
+    bestTimeToVisit: {
+      months: {
+        type: String,
+        default: "",  
+      },
+      reason: {
+        type: String,
+        default: "",   
+      },
+    },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("Destination", destinationSchema);const mongoose = require("mongoose");
+
+const guideApplicationSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true
+    },
+    fullName: {
+      type: String,
+      required: true
+    },
+    phone: {
+      type: String,
+      required: true
+    },
+    city: {
+      type: String,
+      required: true
+    },
+    country: {
+      type: String,
+      required: true
+    },
+    languages: {
+      type: [String],
+      required: true
+    },
+    experience: {
+      type: String,
+      required: true
+    },
+    specialties: {
+      type: [String]
+    },
+    bio: {
+      type: String,
+      required: true
+    },
+    pricePerDay: {
+      type: Number,
+      required: true
+    },
+    idProofImage: {
+      type: String,
+      required: true
+    },
+    selfieImage: {
+      type: String,
+      required: true
+    },
+
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending"
+    }
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("GuideApplication", guideApplicationSchema);const mongoose = require("mongoose");
+
+const messageSchema = new mongoose.Schema(
+  {
+    conversation: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Conversation",
+      required: true,
+    },
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    text: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    read: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("Message", messageSchema);const mongoose = require("mongoose");
+
+const notificationSchema = new mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+    message: { type: String, required: true },
+    title: { type: String, default: "" },
+    type: { 
+      type: String, 
+      enum: [
+        "request", 
+        "application", 
+        "review", 
+        "mention", 
+        "post_like", 
+        "post_comment",
+        "booking_request",
+        "booking_approved",
+        "booking_rejected",
+        "counter_offer",
+        "booking_message",
+        'booking_completed',
+        'completion_requested',
+        'payment_submitted',    
+        'payment_verified',   
+        'payment_rejected'
+      ], 
+      required: true 
+    },
+    link: { type: String, default: "" },
+    read: { type: Boolean, default: false },
+    relatedReview: { type: mongoose.Schema.Types.ObjectId, ref: "Review", default: null },
+    relatedPost: { type: mongoose.Schema.Types.ObjectId, ref: "Post", default: null },
+    relatedId: { type: mongoose.Schema.Types.ObjectId, default: null }, // for booking, post, etc
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("Notification", notificationSchema);const mongoose = require('mongoose');
+
+const paymentProofSchema = new mongoose.Schema(
+  {
+    bookingId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Booking',
+      required: true
+    },
+    guideId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'GuideApplication',
+      required: true
+    },
+    guideUserId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    amount: {
+      type: Number,
+      required: true
+    },
+    currency: {
+      type: String,
+      default: 'INR'
+    },
+    paymentScreenshot: {
+      type: String,
+      required: true // Path to uploaded screenshot file
+    },
+    paymentNotes: {
+      type: String,
+      default: ''
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'verified', 'rejected'],
+      default: 'pending'
+    },
+    submittedAt: {
+      type: Date,
+      default: Date.now
+    },
+    verifiedAt: {
+      type: Date,
+      default: null
+    },
+    verifiedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User', // Admin who verified
+      default: null
+    },
+    adminNotes: {
+      type: String,
+      default: ''
+    },
+    rejectionReason: {
+      type: String,
+      default: ''
+    }
+  },
+  { timestamps: true }
+);
+
+// Indexes for faster queries
+paymentProofSchema.index({ bookingId: 1 });
+paymentProofSchema.index({ guideUserId: 1, status: 1 });
+paymentProofSchema.index({ status: 1, submittedAt: -1 });
+
+const PaymentProof = mongoose.model('PaymentProof', paymentProofSchema);
+
+module.exports = PaymentProof;const mongoose = require("mongoose");
+
+const replySchema = new mongoose.Schema(
+  {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    text: { type: String, required: true, trim: true },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  },
+  { timestamps: true }
+);
+
+
+const commentSchema = new mongoose.Schema(
+  {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    text: { type: String, required: true, trim: true },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    replies: [replySchema],
+  },
+  { timestamps: true }
+);
+
+const postSchema = new mongoose.Schema(
+  {
+    author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    text: { type: String, trim: true },
+    image: { type: String, default: "" },
+    destinationTag: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Destination",
+      default: null,
+    },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    comments: [commentSchema],
+    hashtags: { type: [String], default: [] },
+  },
+  { timestamps: true }
+);
+
+
+
+module.exports = mongoose.model("Post", postSchema);const mongoose = require("mongoose");
+
+const ratingSchema = new mongoose.Schema(
+    {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        destination: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Destination",
+            required: true,
+        },
+        rating: {
+            type: Number,
+            required: true,
+            min: 1,
+            max: 5,
+        },
+    },
+    { timestamps: true }
+);
+
+// One rating per user per destination
+ratingSchema.index({ user: 1, destination: 1 }, { unique: true });
+
+// Helper to recalculate and push avg to Destination
+async function updateDestinationRating(destinationId) {
+    const Destination = mongoose.model("Destination");
+
+    const result = await mongoose.model("Rating").aggregate([
+        { $match: { destination: destinationId } },
+        {
+            $group: {
+                _id: "$destination",
+                avgRating: { $avg: "$rating" },
+                totalRatings: { $sum: 1 },
+            },
+        },
+    ]);
+
+    if (result.length > 0) {
+        await Destination.findByIdAndUpdate(destinationId, {
+            avgRating: Math.round(result[0].avgRating * 10) / 10,
+            totalRatings: result[0].totalRatings,
+        });
+    } else {
+        await Destination.findByIdAndUpdate(destinationId, {
+            avgRating: 0,
+            totalRatings: 0,
+        });
+    }
+}
+
+// Fires on create & update
+ratingSchema.post("save", async function () {
+    await updateDestinationRating(this.destination);
+});
+
+// Fires on findOneAndDelete
+ratingSchema.post("findOneAndDelete", async function (doc) {
+    if (doc) await updateDestinationRating(doc.destination);
+});
+
+// Fires on findOneAndUpdate
+ratingSchema.post("findOneAndUpdate", async function (doc) {
+    if (doc) await updateDestinationRating(doc.destination);
+});
+
+module.exports = mongoose.model("Rating", ratingSchema);const mongoose = require("mongoose");
+
+const requestSchema = new mongoose.Schema(
+  {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    subject: { type: String, required: true, trim: true },
+    category: {
+      type: String,
+      enum: ["Feature Request", "Bug Report", "Destination Suggestion", "Guide Issue", "Other"],
+      default: "Other",
+    },
+    message: { type: String, required: true },
+    status: { type: String, enum: ["pending", "reviewed", "resolved"], default: "pending" },
+    adminReply: { type: String, default: "" },
+    repliedAt: { type: Date },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("Request", requestSchema);const mongoose = require("mongoose");
+
+const replySchema = new mongoose.Schema(
+    {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        text: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        likes: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+    },
+    { timestamps: true }
+);
+
+const reviewSchema = new mongoose.Schema(
+    {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        destination: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Destination",
+            required: true,
+        },
+        text: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        likes: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        replies: [replySchema],
+    },
+    { timestamps: true }
+);
+
+module.exports = mongoose.model("Review", reviewSchema);const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
+    bio: {
+      type: String,
+      default: "",
+      maxlength: 200,
+    },
+    role: {
+      type: String,
+      enum: ["user", "guide", "admin"],
+      default: "user"
+    },
+    isGuideApproved: {
+      type: Boolean,
+      default: false
+    },
+    profile_pic: {
+      type: String,
+      default: "",
+    },
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Destination",
+      },
+    ],
+    // UPI ID for payment (guides)
+    upiId: {
+      type: String,
+      default: '',
+      sparse: true
+    },
+    // Guide stats for tracking earnings and performance
+    guideStats: {
+      totalBookingsCompleted: {
+        type: Number,
+        default: 0
+      },
+      totalEarnings: {
+        type: Number,
+        default: 0
+      },
+      averageRating: {
+        type: Number,
+        default: 0
+      },
+      totalReviews: {
+        type: Number,
+        default: 0
+      },
+      hoursWorked: {
+        type: Number,
+        default: 0
+      },
+      lastWorkedDate: {
+        type: Date,
+        default: null
+      },
+      completionRate: {
+        type: Number,
+        default: 0
+      }, // percentage of accepted bookings completed
+      pendingPayments: {
+        type: Number,
+        default: 0
+      }
+    }
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("User", userSchema);
+

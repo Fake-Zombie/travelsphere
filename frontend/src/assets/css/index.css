@@ -1,0 +1,117 @@
+:root {
+  --bg:          #0f1115;
+  --bg-2:        #16191e;
+  --bg-3:        #1e2228;
+  --surface:     #252a31;
+  --border:      rgba(200, 210, 230, 0.05);
+  --border-mid:  rgba(200, 210, 230, 0.1);
+  --text:        #e2e8f0;
+  --text-dim:    rgba(226, 232, 240, 0.55);
+  --text-muted:  rgba(226, 232, 240, 0.3);
+  --accent:      #94a3b8;
+  --accent-dim:  rgba(77, 84, 95, 0.119);
+  --accent-2:    #38bdf8;
+  --red:         #ef4444;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+
+  --transition: 0.3s ease-out;
+  --navbar-height: 64px;
+/* ── Raw RGB channels ── */
+--rgb-accent:   148, 163, 184;
+--rgb-accent-2: 56, 189, 248;
+--rgb-red:      251, 113, 133;
+--rgb-bg:       15, 17, 21;
+--rgb-surface:  37, 42, 49;
+--rgb-green:    45, 130, 80;
+
+--gold: #f5c842;
+/* ── Semantic tints ── */
+--accent-10:  rgba(148, 163, 184, 0.10);
+--accent-12:  rgba(148, 163, 184, 0.12);
+--accent-15:  rgba(148, 163, 184, 0.15);
+--accent-20:  rgba(148, 163, 184, 0.20);
+--accent-25:  rgba(148, 163, 184, 0.25);
+--accent-30:  rgba(148, 163, 184, 0.30);
+
+--accent2-08: rgba(56, 189, 248, 0.08);
+--accent2-10: rgba(56, 189, 248, 0.10);
+--accent2-15: rgba(56, 189, 248, 0.15);
+--accent2-20: rgba(56, 189, 248, 0.20);
+
+--red-10:     rgba(251, 113, 133, 0.10);
+--red-15:     rgba(251, 113, 133, 0.15);
+--red-30:     rgba(251, 113, 133, 0.30);
+
+--green-10:   rgba(45, 130, 80, 0.10);
+--green-20:   rgba(45, 130, 80, 0.20);
+--green-30:   rgba(45, 130, 80, 0.30);
+
+--bg-10:      rgba(15, 17, 21, 0.10);
+--bg-40:      rgba(15, 17, 21, 0.40);
+--bg-70:      rgba(15, 17, 21, 0.70);
+--bg-90:      rgba(15, 17, 21, 0.90);
+--bg-98:      rgba(15, 17, 21, 0.98);
+
+--surface-50: rgba(37, 42, 49, 0.50);
+}
+
+html {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+body {
+  overflow: visible;
+}
+  input, textarea, select {
+  font-size: 16px !important;
+}
+
+#root {
+  width: 100%;
+}
+
+.navbar {
+  width: 100vw;
+}
+/* Firefox */
+html,
+.admin-tabs {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--bg-2);
+}
+
+/* Chrome, Edge, Safari */
+html::-webkit-scrollbar,
+.admin-tabs::-webkit-scrollbar {
+  width: 10px;
+  height: 6px;
+}
+
+html::-webkit-scrollbar-track,
+.admin-tabs::-webkit-scrollbar-track {
+  background: var(--bg-2);
+}
+
+html::-webkit-scrollbar-thumb,
+.admin-tabs::-webkit-scrollbar-thumb {
+  background: var(--surface);
+  border-radius: 999px;
+  border: 2px solid var(--bg-2);
+}
+
+html::-webkit-scrollbar-thumb:hover,
+.admin-tabs::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+html::-webkit-scrollbar-corner,
+.admin-tabs::-webkit-scrollbar-corner {
+  background: var(--bg-2);
+}

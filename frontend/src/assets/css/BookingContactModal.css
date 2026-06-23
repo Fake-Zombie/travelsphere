@@ -1,0 +1,400 @@
+/* Booking Contact Modal */
+
+.bcm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeInOverlay 0.2s ease-out;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.bcm-modal {
+  background: var(--bg-primary, #0f1419);
+  border: 1px solid var(--border-color, #1a2332);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  height: 70vh;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUpModal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUpModal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.bcm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color, #1a2332);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(14, 165, 233, 0.05) 100%);
+}
+
+.bcm-header-content h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary, #e5e7eb);
+  margin: 0 0 4px 0;
+}
+
+.bcm-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary, #9ca3af);
+  margin: 0;
+}
+
+.bcm-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #9ca3af);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.bcm-close:hover {
+  color: var(--text-primary, #e5e7eb);
+}
+
+/* Messages Container */
+.bcm-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bcm-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bcm-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bcm-messages::-webkit-scrollbar-thumb {
+  background: var(--border-color, #1a2332);
+  border-radius: 3px;
+}
+
+.bcm-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary, #9ca3af);
+}
+
+.bcm-loading,
+.bcm-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary, #9ca3af);
+  gap: 8px;
+  font-size: 14px;
+}
+
+.bcm-empty span {
+  font-size: 40px;
+}
+
+/* Message Item */
+.bcm-message {
+  display: flex;
+  gap: 10px;
+  animation: slideInMsg 0.2s ease-out;
+}
+
+@keyframes slideInMsg {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bcm-msg-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--border-color, #1a2332);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary, #9ca3af);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bcm-msg-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bcm-msg-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bcm-msg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.bcm-msg-sender {
+  font-weight: 600;
+  color: var(--text-primary, #e5e7eb);
+}
+
+.bcm-msg-time {
+  color: var(--text-secondary, #9ca3af);
+}
+
+.bcm-msg-text {
+  background: var(--bg-secondary, #1a2332);
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin: 0;
+  color: var(--text-primary, #e5e7eb);
+  font-size: 14px;
+  word-wrap: break-word;
+  border-left: 2px solid var(--accent-cyan, #06b6d4);
+}
+
+.bcm-message.phone-share .bcm-msg-text {
+  border-left-color: var(--accent-green, #10b981);
+}
+
+.bcm-phone-share {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.bcm-phone-icon {
+  font-size: 18px;
+}
+
+.bcm-phone-link {
+  color: var(--accent-green, #10b981);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 14px;
+  transition: opacity 0.2s;
+}
+
+.bcm-phone-link:hover {
+  opacity: 0.8;
+}
+
+.bcm-msg-read {
+  font-size: 10px;
+  color: var(--accent-cyan, #06b6d4);
+  margin-top: 2px;
+}
+
+/* Footer - Input Area */
+.bcm-footer {
+  padding: 16px;
+  border-top: 1px solid var(--border-color, #1a2332);
+  background: var(--bg-secondary, #1a2332);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bcm-phone-input-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.bcm-phone-input {
+  flex: 1;
+  background: var(--bg-primary, #0f1419);
+  border: 1px solid var(--border-color, #1a2332);
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: var(--text-primary, #e5e7eb);
+  font-size: 14px;
+  font-family: "DM Sans", sans-serif;
+  transition: border-color 0.2s;
+}
+
+.bcm-phone-input:focus {
+  outline: none;
+  border-color: var(--accent-cyan, #06b6d4);
+}
+
+.bcm-cancel-phone {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #9ca3af);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.bcm-cancel-phone:hover {
+  color: var(--text-primary, #e5e7eb);
+}
+
+.bcm-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bcm-textarea {
+  background: var(--bg-primary, #0f1419);
+  border: 1px solid var(--border-color, #1a2332);
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: var(--text-primary, #e5e7eb);
+  font-size: 14px;
+  font-family: "DM Sans", sans-serif;
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.bcm-textarea:focus {
+  outline: none;
+  border-color: var(--accent-cyan, #06b6d4);
+}
+
+.bcm-textarea::placeholder {
+  color: var(--text-secondary, #9ca3af);
+}
+
+.bcm-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.bcm-phone-btn,
+.bcm-send-btn {
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  transition: all 0.2s;
+}
+
+.bcm-phone-btn {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--accent-green, #22c55e);
+  border: 1px solid var(--accent-green, #22c55e);
+}
+
+.bcm-phone-btn:hover {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.bcm-phone-btn.active {
+  background: var(--accent-green, #22c55e);
+  color: var(--bg-primary, #0f1419);
+}
+
+.bcm-send-btn {
+  background: var(--accent-cyan, #06b6d4);
+  color: var(--bg-primary, #0f1419);
+  flex: 1;
+}
+
+.bcm-send-btn:hover:not(:disabled) {
+  background: var(--accent-cyan-hover, #0891b2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.bcm-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+  .bcm-modal {
+    width: 95%;
+    max-height: 80vh;
+  }
+
+  .bcm-header {
+    padding: 16px;
+  }
+
+  .bcm-header-content h2 {
+    font-size: 20px;
+  }
+
+  .bcm-messages {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .bcm-footer {
+    padding: 12px;
+  }
+}

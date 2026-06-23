@@ -1,0 +1,442 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+/* FULL SCREEN WRAPPER  */
+
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  margin-top: 0;
+}
+
+/* Subtle accent glow */
+.auth-wrapper::before {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(200, 169, 110, 0.08), transparent);
+  top: -200px;
+  right: -200px;
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+/* ============ GLASS CARD ============ */
+
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 50px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-mid);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  color: var(--text);
+  transition: var(--transition);
+  position: relative;
+  z-index: 10;
+}
+
+.auth-card.slide-in {
+  animation: slideFadeIn 0.8s ease-out forwards;
+}
+
+/* Slide-up + fade-in animation */
+@keyframes slideFadeIn {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.auth-card h2 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 300;
+  margin-bottom: 36px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.auth-card h2::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+  margin-top: 14px;
+}
+
+/* ============ INPUT GROUP ============ */
+
+.input-group {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.input-group.row {
+  display: flex;
+  gap: 16px;
+}
+
+.input-group.row .input-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-mid);
+  background: transparent;
+  color: var(--text);
+  outline: none;
+  transition: var(--transition);
+  box-sizing: border-box;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 300;
+}
+
+.input-group input::placeholder,
+.input-group select::placeholder {
+  color: var(--text-muted);
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: var(--accent);
+  background: var(--surface-50);
+  box-shadow: 0 0 0 3px var(--accent2-10);
+}
+
+.input-group label {
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  font-weight: 300;
+  pointer-events: none;
+  transition: var(--transition);
+}
+
+/* Floating effect */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label,
+.input-group select:not([value=""]) + label,
+.input-group input:valid + label {
+  top: -8px;
+  left: 16px;
+  background: var(--surface);
+  padding: 0 6px;
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--surface) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ============ BUTTON ============ */
+
+.auth-btn-main {
+  width: 100%;
+  padding: 14px 0;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  background: var(--accent);
+  color: var(--bg);
+  transition: var(--transition);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+.auth-btn-main:hover {
+  background: var(--accent-2);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px var(--accent2-20);
+}
+
+.auth-btn-main:active {
+  transform: translateY(0);
+}
+
+/* ============ GOOGLE BUTTON ============ */
+
+.google-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-mid);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: var(--transition);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.95rem;
+}
+
+.google-btn:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.google-btn img {
+  width: 18px;
+  height: 18px;
+  filter: invert(0.9);
+  opacity: 0.7;
+}
+
+/* ============ DIVIDER ============ */
+
+.divider {
+  text-align: center;
+  margin: 28px 0;
+  color: var(--text-muted);
+  position: relative;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 300;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  height: 1px;
+  width: 40%;
+  background: var(--accent2-08);
+  position: absolute;
+  top: 50%;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+/* ============ SWITCH LINK ============ */
+
+.auth-switch {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  font-family: var(--font-body);
+  font-weight: 300;
+}
+
+.auth-switch span {
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 400;
+  transition: var(--transition);
+}
+
+.auth-switch span:hover {
+  color: var(--accent-2);
+}
+
+/* ============ ERROR MESSAGE ============ */
+
+.auth-error {
+  color: var(--red);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  padding: 10px 12px;
+  background: var(--red-10);
+  border-radius: var(--radius-sm);
+  border-color: var(--red-30);
+}
+
+/* ============ RESPONSIVE ============ */
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 600px) {
+  .auth-wrapper {
+    min-height: 100dvh;
+    height: 100dvh;
+    overflow: hidden;
+    padding: 20px 16px;
+    margin-top: 0;
+    align-items: center;
+  }
+  .auth-card {
+    max-width: 100%;
+    padding: 30px 24px;        /* tighter padding */
+    overflow-y: auto;          /* card itself scrolls if truly needed, not the page */
+    max-height: calc(100dvh - 40px);
+  }
+
+  .auth-card h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .divider {
+    margin: 16px 0;
+  }
+
+  .auth-switch {
+    margin-top: 14px;
+  }
+  .input-group input,
+  .input-group select {
+    padding: 13px 14px;
+    font-size: 0.9rem;
+  }
+
+  .input-group.row {
+    display: flex;
+    gap: 12px;
+    flex-direction: row;
+  }
+
+  .input-group.row .input-group {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  .auth-btn-main {
+    padding: 12px 0;
+    font-size: 0.9rem;
+  }
+
+  .google-btn {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  .divider {
+    margin: 24px 0;
+  }
+
+  .auth-switch {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 35px 20px;
+  }
+
+  .auth-card h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .input-group.row {
+    gap: 10px;
+  }
+
+  .input-group input,
+  .input-group select {
+    padding: 12px 12px;
+    font-size: 0.85rem;
+  }
+
+  .input-group label {
+    font-size: 0.85rem;
+    left: 12px;
+  }
+
+  .input-group input:focus + label,
+  .input-group input:not(:placeholder-shown) + label,
+  .input-group select:not([value=""]) + label,
+  .input-group input:valid + label {
+    font-size: 0.75rem;
+    left: 12px;
+  }
+
+  .auth-btn-main {
+    padding: 11px 0;
+    font-size: 0.85rem;
+  }
+
+  .google-btn {
+    padding: 11px;
+    font-size: 0.85rem;
+    gap: 8px;
+  }
+
+  .google-btn img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .divider {
+    margin: 20px 0;
+    font-size: 0.8rem;
+  }
+
+  .auth-switch {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .auth-card {
+    padding: 30px 16px;
+  }
+
+  .auth-card h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .input-group {
+    margin-bottom: 18px;
+  }
+
+  .input-group.row {
+    gap: 8px;
+  }
+
+  .input-group input,
+  .input-group select {
+    padding: 11px 12px;
+    font-size: 0.8rem;
+  }
+
+  .auth-btn-main {
+    padding: 10px 0;
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+}

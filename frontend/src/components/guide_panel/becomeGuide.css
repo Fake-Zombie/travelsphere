@@ -1,0 +1,184 @@
+/*BECOME GUIDE – AUTH STYLE EXTENSION */
+
+.auth-card.guide-card {
+  max-width: 850px;
+  padding: 60px;
+}
+
+/* Grid layout for form */
+.guide-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.guide-form-grid .full-width {
+  grid-column: span 2;
+}
+
+/* Textarea styling consistent with inputs */
+.input-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-mid);
+  background: transparent;
+  color: var(--text);
+  outline: none;
+  transition: var(--transition);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 300;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.input-group textarea:focus {
+  border-color: var(--accent);
+  background: rgba(31, 28, 24, 0.3);
+  box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.1);
+}
+
+/* Floating label for textarea */
+.input-group textarea:focus + label,
+.input-group textarea:not(:placeholder-shown) + label {
+  top: -8px;
+  left: 16px;
+  background: var(--surface);
+  padding: 0 6px;
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+/* ===============================
+   FILE UPLOAD STYLING
+================================= */
+
+.file-group {
+  margin-bottom: 26px;
+}
+.file-input {
+  position: absolute;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+.file-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px dashed var(--border-mid);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  background: rgba(31, 28, 24, 0.4);
+}
+
+.file-label:hover {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.08);
+}
+
+.file-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.file-title {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.file-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.file-action {
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-mid);
+  color: var(--text-dim);
+  transition: var(--transition);
+}
+
+.file-label:hover .file-action {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.file-name {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+}
+
+/* When file selected */
+.file-group.active .file-label {
+  border-color: var(--accent);
+  background: rgba(200, 169, 110, 0.08);
+}
+
+/* Submit button bigger */
+.guide-submit-btn {
+  grid-column: span 2;
+  margin-top: 10px;
+}
+
+/* Status Message */
+.guide-message {
+  grid-column: span 2;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.guide-message.success {
+  background: rgba(200, 169, 110, 0.08);
+  border: 1px solid rgba(200, 169, 110, 0.3);
+  color: var(--accent);
+}
+
+.guide-message.error {
+  background: rgba(192, 103, 74, 0.08);
+  border: 1px solid rgba(192, 103, 74, 0.3);
+  color: var(--red);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+  .auth-card.guide-card {
+    padding: 50px 40px;
+  }
+
+  .guide-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-form-grid .full-width,
+  .guide-submit-btn,
+  .guide-message {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card.guide-card {
+    padding: 40px 20px;
+  }
+}

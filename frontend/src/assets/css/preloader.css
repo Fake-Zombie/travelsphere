@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* --- Preloader Overlay --- */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.splash-logo {
+  font-family: var(--font-display);
+  font-size: 4.5rem;
+  font-weight: 300;
+  margin: 0;
+  background: linear-gradient(
+    to right,
+    var(--text) 50%,
+    rgba(200, 169, 110, 0.1) 50%
+  );
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition:
+    top 0.8s cubic-bezier(0.87, 0, 0.13, 1),
+    left 0.8s cubic-bezier(0.87, 0, 0.13, 1),
+    font-size 0.8s cubic-bezier(0.87, 0, 0.13, 1);
+  letter-spacing: -0.01em;
+}
+
+.glow-in {
+  animation: logoLineSync 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes logoLineSync {
+  0% {
+    background-position: 100% 0;
+  }
+
+  50% {
+    background-position: 50% 0;
+  }
+
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+/* --- The Loading Bar --- */
+.loading-bar-wrapper {
+  width: 250px;
+  height: 2px;
+  background: rgba(200, 169, 110, 0.1);
+  margin-top: 120px;
+  overflow: hidden;
+  border-radius: 1px;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(
+    to right,
+    var(--accent),
+    var(--accent-2)
+  );
+  animation: barLineSync 2.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  border-radius: 1px;
+}
+
+@keyframes barLineSync {
+  0% {
+    width: 0%;
+  }
+
+  50% {
+    width: 50%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes barSegments {
+  0% {
+    width: 0;
+  }
+
+  30% {
+    width: 35%;
+  }
+
+  65% {
+    width: 70%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+/* --- Fly State --- */
+.fly-to-nav {
+  position: fixed;
+  top: 15px;
+  left: 50px;
+  font-size: 2rem !important;
+  font-family: var(--font-display);
+  -webkit-text-fill-color: var(--text) !important;
+  color: var(--text) !important;
+  transition: all 0.8s cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.exit-bg {
+  background: transparent;
+  pointer-events: none;
+  transition: background 0.6s ease;
+}

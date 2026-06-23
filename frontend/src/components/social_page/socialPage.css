@@ -1,0 +1,169 @@
+/* ── SOCIAL PAGE ── */
+.social-root {
+  display: flex;
+  height: calc(100vh - var(--navbar-height));
+  margin-top: var(--navbar-height);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.social-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* ── CHAT CONTENT (Full height, no padding) ── */
+.social-content.chat-segment {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ── */
+.social-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  padding: 40px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--bg-2);
+}
+
+.social-sidebar-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 16px;
+  padding-left: 12px;
+}
+
+.social-sidebar-item {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.social-sidebar-item:hover {
+  background: var(--accent-dim);
+  color: var(--text);
+}
+
+.social-sidebar-item.active {
+  background: var(--accent-dim);
+  color: var(--accent-2);
+  font-weight: 500;
+}
+
+.sidebar-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  margin-left: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .social-root {
+    flex-direction: column;
+    height: calc(100dvh - var(--navbar-height));
+    overflow: hidden;
+    padding-bottom: 56px;
+  }
+
+  .social-content {
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+    height: 100%;
+    padding: 0;
+    -webkit-overflow-scrolling: touch;
+    /* When chat drawer is open, add padding for the input bar */
+    padding-bottom: 0;
+  }
+
+  /* ── CHAT SEGMENT: Full height, no scroll ── */
+  .social-content.chat-segment {
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .social-content.chat-drawer-open {
+    padding-bottom: 60px;
+  }
+
+  .social-sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 56px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    z-index: 200;
+    background: var(--bg-2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .social-sidebar-title {
+    display: none;
+  }
+
+  .social-sidebar-item {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    font-size: 0.72rem;
+    border-radius: var(--radius-sm);
+  }
+
+  /* ── CHAT BAR POSITIONING (Only when drawer is open) ── */
+  .social-content.chat-drawer-open .chat-footer {
+    position: fixed;
+    bottom: 56px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: var(--bg-2);
+    border-top: 1px solid var(--border);
+    z-index: 199;
+    padding: 12px 14px;
+    box-sizing: border-box;
+  }
+
+  .chat-input-wrap {
+    gap: 8px;
+  }
+
+  .chat-input {
+    padding: 10px 12px;
+    font-size: 16px;
+  }
+
+  .chat-send-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
