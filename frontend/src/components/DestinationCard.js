@@ -22,7 +22,7 @@ function DestinationCard({
       {/* Main Image */}
       <img
         className="dest-bg-image"
-        src={`http://localhost:5000${image}`}
+        src={{image?.startsWith("http") ? image : `${API_URL}${image}`}}
         alt={name}
         onError={(e) => {
           e.target.src = "/static/uploads/country_pics/default.jpg";

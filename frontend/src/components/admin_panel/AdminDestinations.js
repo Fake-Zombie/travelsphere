@@ -69,7 +69,7 @@ function AdminDestinations() {
             bestTimeMonths: dest.bestTimeToVisit?.months || "",
             bestTimeReason: dest.bestTimeToVisit?.reason || "",
         });
-        setPreview(`http://localhost:5000${dest.image}`);
+        setPreview(`${API_URL}${dest.image}`);
         setMode("edit");
     };
 
@@ -195,7 +195,7 @@ function AdminDestinations() {
                                 onClick={() => openView(dest)}
                             >
                                 <img
-                                    src={`http://localhost:5000${dest.image}`}
+                                    src={`${API_URL}${dest.image}`}
                                     alt={dest.name}
                                     className="ad-thumb"
                                     onError={(e) => { e.target.src = "/static/uploads/country_pics/default.jpg"; }}
@@ -226,7 +226,7 @@ function AdminDestinations() {
                 {mode === "view" && selected && (
                     <div className="ad-view">
                         <img
-                            src={`http://localhost:5000${selected.image}`}
+                            src={`${API_URL}${selected.image}`}
                             alt={selected.name}
                             className="ad-detail-img"
                             onError={(e) => { e.target.src = "/static/uploads/country_pics/default.jpg"; }}
