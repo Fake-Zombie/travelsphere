@@ -1,4 +1,6 @@
 // services/api.js
+export const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 export const RATE_URL = "/rate";
 export const COMMENT_URL = "/comment";
 
