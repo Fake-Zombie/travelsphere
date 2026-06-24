@@ -195,7 +195,7 @@ function AdminDestinations() {
                                 onClick={() => openView(dest)}
                             >
                                 <img
-                                    src={`${API_URL}${dest.image}`}
+                                    src={dest.image?.startsWith("http") ? dest.image : `${API_URL}${dest.image}`}
                                     alt={dest.name}
                                     className="ad-thumb"
                                     onError={(e) => { e.target.src = `${API_URL}/static/uploads/country_pics/default.jpg`; }}
@@ -226,7 +226,7 @@ function AdminDestinations() {
                 {mode === "view" && selected && (
                     <div className="ad-view">
                         <img
-                            src={`${API_URL}${selected.image}`}
+                            src={selected.image?.startsWith("http") ? selected.image : `${API_URL}${selected.image}`}
                             alt={selected.name}
                             className="ad-detail-img"
                             onError={(e) => { e.target.src = `${API_URL}/static/uploads/country_pics/default.jpg`; }}
