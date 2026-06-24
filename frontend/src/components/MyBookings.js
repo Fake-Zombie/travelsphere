@@ -5,8 +5,8 @@ import CompletionConfirmModal from './modal/CompletionConfirmModal';
 import BookingModal from './destination_page/BookingModal';
 import Toast from './toast/Toast';
 import { useToast } from './toast/useToast';
-
-const BASE_URL = "http://localhost:5000";
+import { API_URL } from "../services/api";
+const BASE_URL = API_URL;
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);

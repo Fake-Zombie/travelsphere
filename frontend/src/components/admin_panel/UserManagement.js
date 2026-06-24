@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../modal/Modal";
 import "./userManagement.css";
-
+import { API_URL } from "../../services/api";
 // ── Avatar initials helper ──────────────────────────────────────────────────
 function Avatar({ name = "", role = "user" }) {
   const initials = name
@@ -92,8 +92,8 @@ function UserManagement() {
       const token = localStorage.getItem("token");
       const headers = { Authorization: `Bearer ${token}` };
       const [uRes, gRes] = await Promise.all([
-        fetch("http://localhost:5000/api/admin/users", { headers }),
-        fetch("http://localhost:5000/api/admin/guides", { headers }),
+        fetch(`${API_URL}/api/admin/users`, { headers }),
+        fetch(`${API_URL}/api/admin/guides`, { headers }),
       ]);
       setUsers(uRes.ok ? await uRes.json() : []);
       setGuides(gRes.ok ? await gRes.json() : []);
@@ -139,7 +139,7 @@ function UserManagement() {
     closeModal(); setActionLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+      const res = await fetch(`${API_URL}/api/admin/users/${userId}`, {
         method: "DELETE", headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -156,7 +156,7 @@ function UserManagement() {
     closeModal(); setActionLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/admin/guides/${guideId}`, {
+      const res = await fetch(`${API_URL}/api/admin/guides/${guideId}`, {
         method: "DELETE", headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) setGuides((p) => p.filter((g) => g._id !== guideId));
@@ -170,7 +170,7 @@ function UserManagement() {
     closeModal(); setActionLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/admin/make-admin/${userId}`, {
+      const res = await fetch(`${API_URL}/api/admin/make-admin/${userId}`, {
         method: "PUT", headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) setUsers((p) => p.map((u) => u._id === userId ? { ...u, role: "admin" } : u));
@@ -187,7 +187,7 @@ function UserManagement() {
     closeModal(); setActionLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/admin/demote-admin/${userId}`, {
+      const res = await fetch(`${API_URL}/api/admin/demote-admin/${userId}`, {
         method: "PUT", headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) setUsers((p) => p.map((u) => u._id === userId ? { ...u, role: "user" } : u));
@@ -203,10 +203,10 @@ function UserManagement() {
     closeModal(); setActionLoading(true);
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/admin/demote-guide/${userId}`, {
+      await fetch(`${API_URL}/api/admin/demote-guide/${userId}`, {
         method: "PUT", headers: { Authorization: `Bearer ${token}` },
       });
-      await fetch(`http://localhost:5000/api/admin/guides/${guideId}`, {
+      await fetch(`${API_URL}/api/admin/guides/${guideId}`, {
         method: "DELETE", headers: { Authorization: `Bearer ${token}` },
       });
       setUsers((p) => p.map((u) => u._id === userId ? { ...u, role: "user" } : u));
@@ -231,7 +231,7 @@ function UserManagement() {
   const confirmEditGuide = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/admin/guides/${editGuide._id}`, {
+      const res = await fetch(`${API_URL}/api/admin/guides/${editGuide._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({

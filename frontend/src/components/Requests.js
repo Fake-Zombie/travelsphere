@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../assets/css/requests.css";
-
+import { API_URL } from "../services/api";
 const CATEGORIES = ["Feature Request", "Bug Report", "Destination Suggestion", "Guide Issue", "Other"];
 
 function Requests() {
@@ -36,7 +36,7 @@ const fetchMyRequests = async () => {
   try {
     setLoading(true);
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/requests/my", {
+    const res = await fetch(`${API_URL}/api/requests/my`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) throw new Error("Failed to fetch requests");
@@ -56,7 +56,7 @@ const fetchMyRequests = async () => {
     try {
       setSubmitting(true);
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/requests", {
+      const res = await fetch(`${API_URL}/api/requests`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import "../assets/css/auth.css";
-
+import { API_URL } from "../services/api";
 function Signup() {
   const [form, setForm] = useState({ username: "", email: "", country: "", password: "" });
   const [error, setError] = useState("");
@@ -21,7 +21,7 @@ function Signup() {
     setTimeout(() => setFlying(false), 1500);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -45,7 +45,7 @@ function Signup() {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/google", {
+      const res = await fetch(`${API_URL}/api/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ credential: credentialResponse.credential }),

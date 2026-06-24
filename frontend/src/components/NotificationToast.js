@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSocket } from "../context/SocketContext";
 import { Link } from "react-router-dom";
 import "./NotificationToast.css";
+import { API_URL } from "../services/api";
 
 export default function NotificationToast({ onNewNotification }) {
   const { socket } = useSocket();

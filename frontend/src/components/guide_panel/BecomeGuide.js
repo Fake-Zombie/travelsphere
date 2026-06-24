@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./becomeGuide.css";
-
-
+import { API_URL } from "../../services/api";
 function BecomeGuide() {
   const [form, setForm] = useState({
     fullName: "",
@@ -28,7 +27,7 @@ useEffect(() => {
   const checkApplication = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/guides/my-application", {
+      const res = await fetch(`${API_URL}/api/guides/my-application`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = res.ok ? await res.json() : null;
@@ -72,7 +71,7 @@ const handleSubmit = async (e) => {
   formData.append("selfieImage", selfieImage);
 
   try {
-    const res = await fetch("http://localhost:5000/api/guides/apply", {
+    const res = await fetch(`${API_URL}/api/guides/apply`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`

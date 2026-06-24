@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/applications.css";
-
-const BASE_URL = "http://localhost:5000";
+import { API_URL } from "../services/api";
+const BASE_URL = API_URL;
 
 function Applications() {
   const [application, setApplication] = useState(null);

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProfilePicUrl } from "../../utils/profilePicUrl";
 import "./socialPageFeed.css";
-
+import { API_URL } from "../../services/api";
 // ── Render @mentions as clickable spans ──────────────────────────────────────
 function renderTextWithMentions(text, navigate) {
   if (!text) return null;
@@ -172,7 +172,7 @@ if (dragY.current > 130) {
     if (!text) return;
     try {
       const res = await fetch(
-        `http://localhost:5000/api/posts/${post._id}/comment`,
+        `${API_URL}/api/posts/${post._id}/comment`,
         {
           method: "POST",
           headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
@@ -188,7 +188,7 @@ if (dragY.current > 130) {
   const handleCommentLike = async (commentId) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/posts/${post._id}/comment/${commentId}/like`,
+        `${API_URL}/api/posts/${post._id}/comment/${commentId}/like`,
         { method: "POST", headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();
@@ -200,7 +200,7 @@ if (dragY.current > 130) {
   const handleCommentDelete = async (commentId) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/posts/${post._id}/comment/${commentId}`,
+        `${API_URL}/api/posts/${post._id}/comment/${commentId}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.ok) onCommentDeleted(post._id, commentId);
@@ -336,9 +336,9 @@ function SocialFeed() {
   const [activePost, setActivePost] = useState(null);
 
   const endpoints = {
-    following: "http://localhost:5000/api/posts/feed",
-    trending: "http://localhost:5000/api/posts/trending",
-    global: "http://localhost:5000/api/posts/global",
+    following: `${API_URL}/api/posts/feed`,
+    trending: `${API_URL}/api/posts/trending`,
+    global: `${API_URL}/api/posts/global`,
   };
 
   const fetchPosts = async (tab) => {
@@ -368,7 +368,7 @@ function SocialFeed() {
   // ── Post like ─────────────────────────────────────────────────────────
   const handleLike = async (postId) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
+      const res = await fetch(`${API_URL}/api/posts/${postId}/like`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });

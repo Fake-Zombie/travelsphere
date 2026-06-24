@@ -3,7 +3,7 @@ import SocialFeed from "./SocialPageSegment1";
 import SocialCompanions from "./SocialPageSegment2";
 import SocialChat from "./SocialPageSegment3";
 import "./socialPage.css";
-
+import { API_URL } from "../../services/api";
 function SocialPage({ onSocialDotChange }) {
   const [activeSegment, setActiveSegment] = useState(() => {
   return localStorage.getItem("socialActiveSegment") || "feed";
@@ -42,7 +42,7 @@ function SocialPage({ onSocialDotChange }) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    fetch("http://localhost:5000/api/companions/pending", {
+    fetch(`${API_URL}/api/companions/pending`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => r.json())

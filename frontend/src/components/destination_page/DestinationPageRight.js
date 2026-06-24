@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../modal/Modal';
 import BookingModal from './BookingModal';
+import { API_URL } from "../../services/api";
 
 // ── Avatar ──────────────────────────────────────────────────────────
 function Avatar({ user, size = 'md', onClick }) {

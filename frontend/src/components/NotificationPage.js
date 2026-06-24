@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/notification.css";
 import { useSocket } from "../context/SocketContext";
-
+import { API_URL } from "../services/api";
 function NotificationPage({ setNotificationsCount }) {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,7 +56,7 @@ function NotificationPage({ setNotificationsCount }) {
 
   const markAllRead = async () => {
     try {
-      await fetch("http://localhost:5000/api/notifications/read-all", {
+      await fetch(`${API_URL}/api/notifications/read-all`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -70,7 +70,7 @@ function NotificationPage({ setNotificationsCount }) {
   const fetchNotifications = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/notifications", {
+      const res = await fetch(`${API_URL}/api/notifications`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -84,7 +84,7 @@ function NotificationPage({ setNotificationsCount }) {
 
   const markRead = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/notifications/${id}/read`, {
+      await fetch(`${API_URL}/api/notifications/${id}/read`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -99,7 +99,7 @@ function NotificationPage({ setNotificationsCount }) {
   const deleteOne = async (e, id) => {
     e.stopPropagation();
     try {
-      await fetch(`http://localhost:5000/api/notifications/${id}`, {
+      await fetch(`${API_URL}/api/notifications/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -111,7 +111,7 @@ function NotificationPage({ setNotificationsCount }) {
 
   const clearAll = async () => {
     try {
-      await fetch("http://localhost:5000/api/notifications", {
+      await fetch(`${API_URL}/api/notifications`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

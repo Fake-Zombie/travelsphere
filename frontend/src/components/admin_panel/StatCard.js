@@ -1,4 +1,5 @@
 import React from "react";
+import { API_URL } from "../../services/api";
 
 function StatCard({ title, value }) {
   return (

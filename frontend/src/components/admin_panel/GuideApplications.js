@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { API_URL } from "../../services/api";
 function GuideApplications() {
   const [applications, setApplications] = useState([]);
   const [selectedApp, setSelectedApp] = useState(null);
@@ -12,7 +12,7 @@ function GuideApplications() {
   const fetchApplications = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/guides/applications", {
+      const res = await fetch(`${API_URL}/api/guides/applications`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = res.ok ? await res.json() : [];
@@ -27,7 +27,7 @@ function GuideApplications() {
   const handleApprove = async (id) => {
   try {
     const token = localStorage.getItem("token");
-    const res = await fetch(`http://localhost:5000/api/guides/applications/${id}/approve`, {
+    const res = await fetch(`${API_URL}/api/guides/applications/${id}/approve`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -45,7 +45,7 @@ function GuideApplications() {
   const handleReject = async (id) => {
   try {
     const token = localStorage.getItem("token");
-    const res = await fetch(`http://localhost:5000/api/guides/applications/${id}/reject`, {
+    const res = await fetch(`${API_URL}/api/guides/applications/${id}/reject`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -99,14 +99,14 @@ function GuideApplications() {
               <div style={{ flex: 1 }}>
                 <p><strong>ID Proof</strong></p>
                 <img
-                  src={`http://localhost:5000/static/${selectedApp.idProofImage.replace(/\\/g, "/").replace("uploads/", "")}`}
+                  src={`${API_URL}/static/${selectedApp.idProofImage.replace(/\\/g, "/").replace("uploads/", "")}`}
                   alt="ID Proof"
                   style={{ width: "100%", borderRadius: "4px", border: "1px solid var(--border-mid)", marginTop: "8px" }}
                 />
                 <button
                   className="close-btn"
                   style={{ marginTop: "8px", width: "100%" }}
-                  onClick={() => window.open(`http://localhost:5000/static/${selectedApp.idProofImage.replace(/\\/g, "/").replace("uploads/", "")}`, "_blank")}
+                  onClick={() => window.open(`${API_URL}/static/${selectedApp.idProofImage.replace(/\\/g, "/").replace("uploads/", "")}`, "_blank")}
                 >
                   View Full
                 </button>
@@ -115,14 +115,14 @@ function GuideApplications() {
               <div style={{ flex: 1 }}>
                 <p><strong>Selfie</strong></p>
                 <img
-                  src={`http://localhost:5000/static/${selectedApp.selfieImage.replace(/\\/g, "/").replace("uploads/", "")}`}
+                  src={`${API_URL}/static/${selectedApp.selfieImage.replace(/\\/g, "/").replace("uploads/", "")}`}
                   alt="Selfie"
                   style={{ width: "100%", borderRadius: "4px", border: "1px solid var(--border-mid)", marginTop: "8px" }}
                 />
                 <button
                   className="close-btn"
                   style={{ marginTop: "8px", width: "100%" }}
-                  onClick={() => window.open(`http://localhost:5000/static/${selectedApp.selfieImage.replace(/\\/g, "/").replace("uploads/", "")}`, "_blank")}
+                  onClick={() => window.open(`${API_URL}/static/${selectedApp.selfieImage.replace(/\\/g, "/").replace("uploads/", "")}`, "_blank")}
                 >
                   View Full
                 </button>

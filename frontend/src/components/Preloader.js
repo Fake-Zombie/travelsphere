@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../assets/css/preloader.css';
 import { useLocation } from 'react-router-dom';
+import { API_URL } from "../services/api";
 
 const Preloader = ({ onComplete }) => {
   const [isSettling, setIsSettling] = useState(false);

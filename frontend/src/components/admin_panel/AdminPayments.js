@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./adminPayments.css";
-
-const BASE_URL = "http://localhost:5000";
+import { API_URL } from "../../services/api";
+const BASE_URL = API_URL;
 
 function AdminPayments() {
   const [activeTab, setActiveTab] = useState("pending");

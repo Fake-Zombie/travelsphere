@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../assets/css/BookingContactModal.css";
 import { useSocket } from "../context/SocketContext";
-
+import { API_URL } from "../services/api";
 function BookingContactModal({ booking, isGuide, onClose, onMessageSent, isOpen = true }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -11,7 +11,7 @@ function BookingContactModal({ booking, isGuide, onClose, onMessageSent, isOpen 
   const [showPhoneInput, setShowPhoneInput] = useState(false);
   const { socket } = useSocket();
   const token = localStorage.getItem("token");
-  const BASE_URL = "http://localhost:5000";
+  const BASE_URL = API_URL;
 
   // Get current user from localStorage
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");

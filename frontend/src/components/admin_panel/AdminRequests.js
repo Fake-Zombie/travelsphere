@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../modal/Modal";
 import "../admin_panel/adminRequests.css";
-
+import { API_URL } from "../../services/api";
 function AdminRequests() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +23,7 @@ function AdminRequests() {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/requests", {
+      const res = await fetch(`${API_URL}/api/requests`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch requests");
@@ -40,7 +40,7 @@ const updateStatus = async (req, status) => {
 
   try {
     const token = localStorage.getItem("token");
- const res = await fetch(`http://localhost:5000/api/requests/${req._id}/status`, {
+ const res = await fetch(`${API_URL}/api/requests/${req._id}/status`, {
           method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -66,7 +66,7 @@ const updateStatus = async (req, status) => {
   try {
     setReplyLoading(true);
     const token = localStorage.getItem("token");
-const res = await fetch(`http://localhost:5000/api/requests/${req._id}/reply`, {
+const res = await fetch(`${API_URL}/api/requests/${req._id}/reply`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

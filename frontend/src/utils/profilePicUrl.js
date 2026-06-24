@@ -3,5 +3,5 @@
 export function getProfilePicUrl(profile_pic) {
   if (!profile_pic) return null;
   if (profile_pic.startsWith("http")) return profile_pic;
-  return `http://localhost:5000/static/profile_pics/${profile_pic}`;
+  return `${API_URL}/static/profile_pics/${profile_pic}`;
 }

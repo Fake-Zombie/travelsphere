@@ -4,8 +4,8 @@ import BookingContactModal from "../BookingContactModal";
 import CompletionRequestModal from '../modal/CompletionRequestModal';
 import Toast from '../toast/Toast';
 import { useToast } from '../toast/useToast';
-
-const BASE_URL = "http://localhost:5000";
+import { API_URL } from "../../services/api";
+const BASE_URL = API_URL;
 
 function GuideBookingRequests() {
   const [bookings, setBookings] = useState([]);
@@ -293,7 +293,7 @@ function GuideBookingRequests() {
                       <div className="gbr-user-avatar">
                         {booking.userId?.profile_pic ? (
                           <img
-                            src={`http://localhost:5000/static/profile_pics/${booking.userId.profile_pic}`}
+                            src={`${API_URL}/static/profile_pics/${booking.userId.profile_pic}`}
                             alt={booking.userId?.fullName}
                           />
                         ) : (
@@ -495,7 +495,7 @@ function GuideBookingRequests() {
                           <div className="gbr-participant-avatar">
                             {selectedCompletionBooking.userId?.profile_pic ? (
                               <img
-                                src={`http://localhost:5000/static/profile_pics/${selectedCompletionBooking.userId.profile_pic}`}
+                                src={`${API_URL}/static/profile_pics/${selectedCompletionBooking.userId.profile_pic}`}
                                 alt={selectedCompletionBooking.userId?.fullName}
                               />
                             ) : (

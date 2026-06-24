@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../modal/Modal';
 import './BookingModal.css';
-
+import { API_URL } from "../../services/api";
 function BookingModal({ isOpen, onClose, guideId, destinationId, guideName, onSubmitSuccess }) {
   const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ function BookingModal({ isOpen, onClose, guideId, destinationId, guideName, onSu
 
   try {
     const token = localStorage.getItem('token');
-    const res = await fetch('http://localhost:5000/api/booking/create', {
+    const res = await fetch(`${API_URL}/api/booking/create`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',

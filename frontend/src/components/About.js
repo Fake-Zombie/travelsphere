@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../assets/css/about.css';
 import ankurPhoto from '../assets/images/ankur.jpg';
+import { API_URL } from "../services/api";
 
 const VALUES = [
   {

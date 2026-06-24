@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import "../assets/css/auth.css";
-
+import { API_URL } from "../services/api";
 function Login({ setLoggedIn, setUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +20,7 @@ function Login({ setLoggedIn, setUser }) {
     setTimeout(() => setFlying(false), 1500);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -49,7 +49,7 @@ function Login({ setLoggedIn, setUser }) {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/google", {
+      const res = await fetch(`${API_URL}/api/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ credential: credentialResponse.credential }),

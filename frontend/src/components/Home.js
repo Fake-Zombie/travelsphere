@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Toast from './toast/Toast';
 import { useToast } from './toast/useToast';
-
+import { API_URL } from "../services/api";
 const auroraVideo = "https://res.cloudinary.com/dzxgqrpnp/video/upload/v1782279298/aurora_fnknkn.mp4";
 
 
@@ -48,7 +48,7 @@ const handleDestinationRequest = async () => {
   try {
     setRequestingDestination(true);
 
-    const res = await fetch("http://localhost:5000/api/requests", {
+    const res = await fetch(`${API_URL}/api/requests`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

@@ -4,7 +4,7 @@ import { getProfilePicUrl } from "../../utils/profilePicUrl";
 import "./socialPageCompanion.css";
 import Modal from "../modal/Modal";
 import { useSocket } from "../../context/SocketContext";
-
+import { API_URL } from "../../services/api";
 function SocialCompanions({ onOpenChat, onPendingCount }) {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -36,10 +36,10 @@ function SocialCompanions({ onOpenChat, onPendingCount }) {
   const fetchAll = async () => {
     try {
       const [cRes, pRes] = await Promise.all([
-        fetch("http://localhost:5000/api/companions", {
+        fetch(`${API_URL}/api/companions`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch("http://localhost:5000/api/companions/pending", {
+        fetch(`${API_URL}/api/companions/pending`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -68,7 +68,7 @@ function SocialCompanions({ onOpenChat, onPendingCount }) {
       setSearchLoading(true);
       try {
         const res = await fetch(
-          `http://localhost:5000/api/companions/search?q=${encodeURIComponent(
+          `${API_URL}/api/companions/search?q=${encodeURIComponent(
             searchQuery
           )}`,
           { headers: { Authorization: `Bearer ${token}` } }
@@ -86,7 +86,7 @@ function SocialCompanions({ onOpenChat, onPendingCount }) {
   const handleSendRequest = async (userId) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/companions/request/${userId}`,
+        `${API_URL}/api/companions/request/${userId}`,
         { method: "POST", headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.ok) setRequestSent((prev) => ({ ...prev, [userId]: true }));
@@ -98,7 +98,7 @@ function SocialCompanions({ onOpenChat, onPendingCount }) {
   const handleCancelRequest = async (userId) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/companions/cancel/${userId}`,
+        `${API_URL}/api/companions/cancel/${userId}`,
         { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.ok) setRequestSent((prev) => ({ ...prev, [userId]: false }));
@@ -108,7 +108,7 @@ function SocialCompanions({ onOpenChat, onPendingCount }) {
   };
 
   const handleAccept = async (senderId) => {
-    await fetch(`http://localhost:5000/api/companions/accept/${senderId}`, {
+    await fetch(`${API_URL}/api/companions/accept/${senderId}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -118,7 +118,7 @@ function SocialCompanions({ onOpenChat, onPendingCount }) {
   };
 
   const handleReject = async (senderId) => {
-    await fetch(`http://localhost:5000/api/companions/reject/${senderId}`, {
+    await fetch(`${API_URL}/api/companions/reject/${senderId}`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -129,7 +129,7 @@ function SocialCompanions({ onOpenChat, onPendingCount }) {
 
   const confirmRemove = async () => {
     await fetch(
-      `http://localhost:5000/api/companions/remove/${removeTarget.id}`,
+      `${API_URL}/api/companions/remove/${removeTarget.id}`,
       { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
     );
     setRemoveTarget(null);

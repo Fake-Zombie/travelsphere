@@ -1,5 +1,6 @@
 // Comments.js
 import React from 'react';
+import { API_URL } from "../services/api";
 
 function Comments({ destinationId }) {
   return (

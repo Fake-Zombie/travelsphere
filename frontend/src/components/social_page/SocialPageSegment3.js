@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { getProfilePicUrl } from "../../utils/profilePicUrl";
 import { useSocket } from "../../context/SocketContext";
 import "./socialPageChat.css";
-
+import { API_URL } from "../../services/api";
 function SocialChat({ initialUserId }) {
   const token = localStorage.getItem("token");
   const storedUser = JSON.parse(localStorage.getItem("user") || "null");
@@ -41,7 +41,7 @@ useEffect(() => {
   // ── LOAD CONVERSATIONS ────────────────────────────────
   useEffect(() => {
     if (!token) return;
-    fetch("http://localhost:5000/api/conversations", {
+    fetch(`${API_URL}/api/conversations`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => r.json())
@@ -52,7 +52,7 @@ useEffect(() => {
   // ── LOAD COMPANIONS ───────────────────────────────────
   useEffect(() => {
     if (!token) return;
-    fetch("http://localhost:5000/api/companions", {
+    fetch(`${API_URL}/api/companions`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => r.json())
@@ -126,7 +126,7 @@ useEffect(() => {
   const openConversation = async (userId) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/conversations/open/${userId}`,
+        `${API_URL}/api/conversations/open/${userId}`,
         { method: "POST", headers: { Authorization: `Bearer ${token}` } }
       );
       const conv = await res.json();
@@ -160,7 +160,7 @@ useEffect(() => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:5000/api/conversations/${convId}/messages`,
+        `${API_URL}/api/conversations/${convId}/messages`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();

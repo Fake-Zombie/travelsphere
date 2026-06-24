@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import DestinationPageLeft from './DestinationPageLeft';
 import DestinationPageRight from './DestinationPageRight';
 import './destinationPage.css';
-
+import { API_URL } from "../../services/api";
 function DestinationPage({ destinations, favorites, toggleFavorite }) {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ function DestinationPage({ destinations, favorites, toggleFavorite }) {
   // Fetch fresh destination data on mount — keeps avgRating & totalRatings accurate after refresh
   useEffect(() => {
     if (!id) return;
-    fetch(`http://localhost:5000/api/destinations/${id}`)
+    fetch(`${API_URL}/api/destinations/${id}`)
       .then(r => r.json())
       .then(data => {
         if (data?.avgRating !== undefined) setAvgRating(data.avgRating);
@@ -36,7 +36,7 @@ function DestinationPage({ destinations, favorites, toggleFavorite }) {
   // Fetch user's own rating
   useEffect(() => {
     if (!token || !dest) return;
-    fetch(`http://localhost:5000/api/ratings/${dest._id}/mine`, {
+    fetch(`${API_URL}/api/ratings/${dest._id}/mine`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
@@ -49,7 +49,7 @@ function DestinationPage({ destinations, favorites, toggleFavorite }) {
   useEffect(() => {
     if (!dest) return;
     setReviewsLoading(true);
-    fetch(`http://localhost:5000/api/reviews/${dest._id}`)
+    fetch(`${API_URL}/api/reviews/${dest._id}`)
       .then(r => r.json())
       .then(data => { setReviews(Array.isArray(data) ? data : []); setReviewsLoading(false); })
       .catch(() => setReviewsLoading(false));
@@ -60,7 +60,7 @@ function DestinationPage({ destinations, favorites, toggleFavorite }) {
 
 useEffect(() => {
   if (!id) return;
-  fetch(`http://localhost:5000/api/guides/destination/${id}`)
+  fetch(`${API_URL}/api/guides/destination/${id}`)
     .then(r => r.json())
     .then(data => setGuides(Array.isArray(data) ? data : []))
     .catch(() => {});
@@ -71,7 +71,7 @@ useEffect(() => {
     setUserRating(value);
     setRatingSubmitted(true);
     try {
-      const res = await fetch(`http://localhost:5000/api/ratings/${dest._id}`, {
+      const res = await fetch(`${API_URL}/api/ratings/${dest._id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ value })
@@ -85,7 +85,7 @@ useEffect(() => {
   const submitReview = async (text) => {
     if (!token) { navigate('/login'); return; }
     try {
-      const res = await fetch(`http://localhost:5000/api/reviews/${dest._id}`, {
+      const res = await fetch(`${API_URL}/api/reviews/${dest._id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ text })
@@ -98,7 +98,7 @@ useEffect(() => {
   const handleLike = async (reviewId) => {
     if (!token) { navigate('/login'); return; }
     try {
-      const res = await fetch(`http://localhost:5000/api/reviews/${reviewId}/like`, {
+      const res = await fetch(`${API_URL}/api/reviews/${reviewId}/like`, {
         method: 'POST', headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -109,7 +109,7 @@ useEffect(() => {
   const handleReply = async (reviewId, text) => {
     if (!token) { navigate('/login'); return; }
     try {
-      const res = await fetch(`http://localhost:5000/api/reviews/${reviewId}/reply`, {
+      const res = await fetch(`${API_URL}/api/reviews/${reviewId}/reply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ text })
@@ -122,7 +122,7 @@ useEffect(() => {
   const handleLikeReply = async (reviewId, replyId) => {
     if (!token) { navigate('/login'); return; }
     try {
-      const res = await fetch(`http://localhost:5000/api/reviews/${reviewId}/replies/${replyId}/like`, {
+      const res = await fetch(`${API_URL}/api/reviews/${reviewId}/replies/${replyId}/like`, {
         method: 'POST', headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -130,7 +130,7 @@ useEffect(() => {
     } catch (err) { console.error(err); }
   };
   const handleDeleteReview = async (reviewId) => {
-    await fetch(`http://localhost:5000/api/reviews/${reviewId}`, {
+    await fetch(`${API_URL}/api/reviews/${reviewId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -138,7 +138,7 @@ useEffect(() => {
   };
 
   const handleDeleteReply = async (reviewId, replyId) => {
-    await fetch(`http://localhost:5000/api/reviews/${reviewId}/replies/${replyId}`, {
+    await fetch(`${API_URL}/api/reviews/${reviewId}/replies/${replyId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     });

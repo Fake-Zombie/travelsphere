@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Modal from "../modal/Modal";
 import "./addAdminDestinations.css";
-
+import { API_URL } from "../../services/api";
 const EMPTY_FORM = {
   name: "", country: "", description: "", type: "", image: null,
   bestTimeMonths: "", bestTimeReason: ""
@@ -39,7 +39,7 @@ function AdminDestinations() {
         try {
             setLoading(true);
             const token = localStorage.getItem("token");
-            const res = await fetch("http://localhost:5000/api/destinations", {
+            const res = await fetch(`${API_URL}/api/destinations`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             const data = await res.json();
@@ -100,8 +100,8 @@ function AdminDestinations() {
             if (form.image) formData.append("image", form.image);
 
             const url = mode === "edit"
-                ? `http://localhost:5000/api/destinations/${selected._id}`
-                : "http://localhost:5000/api/destinations";
+                ? `${API_URL}/api/destinations/${selected._id}`
+                : `${API_URL}/api/destinations`;
             const method = mode === "edit" ? "PUT" : "POST";
 
             const res = await fetch(url, {
@@ -141,7 +141,7 @@ function AdminDestinations() {
                 closeModal();
                 try {
                     const token = localStorage.getItem("token");
-                    const res = await fetch(`http://localhost:5000/api/destinations/${id}`, {
+                    const res = await fetch(`${API_URL}/api/destinations/${id}`, {
                         method: "DELETE",
                         headers: { Authorization: `Bearer ${token}` },
                     });

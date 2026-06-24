@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import '../assets/css/navbar.css';
 import { getProfilePicUrl } from '../utils/profilePicUrl';
-
+import { API_URL } from "../services/api";
 function Navbar({ favorites = [], destinations = [], notificationsCount = 0, loggedIn, user, setLoggedIn, setUser, socialDot = false }) {
   const navigate = useNavigate();
   const [showFavoritesDropdown, setShowFavoritesDropdown] = useState(false);
@@ -15,7 +15,7 @@ function Navbar({ favorites = [], destinations = [], notificationsCount = 0, log
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [hasPendingPayments, setHasPendingPayments] = useState(false);
-  const BASE_URL = "http://localhost:5000";
+  const BASE_URL = API_URL;
 
   // Check for pending payments on mount
   useEffect(() => {

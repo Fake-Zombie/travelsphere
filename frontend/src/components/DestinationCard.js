@@ -1,5 +1,6 @@
 import React from 'react';
 import '../assets/css/destinationCard.css';
+import { API_URL } from "../services/api";
 
 function DestinationCard({ 
   dest, 

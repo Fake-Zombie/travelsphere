@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./pendingPayments.css";
+import { API_URL } from "../services/api";
 // Import your QR code image here
 // import ADMIN_QR_CODE from "../assets/images/qr-code.png";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = API_URL;
 const ADMIN_UPI_ID = process.env.REACT_APP_ADMIN_UPI_ID || "ankurrajak@oksbi";
 // Use public URL or imported image
 const ADMIN_QR_CODE = process.env.REACT_APP_ADMIN_QR_CODE || "/images/qr-code.png";

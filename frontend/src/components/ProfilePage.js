@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getProfilePicUrl } from '../utils/profilePicUrl';
 import "../assets/css/profilePage.css";
 import Cropper from "react-easy-crop";
-
+import { API_URL } from "../services/api";
 function ProfilePage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -130,7 +130,7 @@ const handlePost = async () => {
   if (postHashtags.length) formData.append("hashtags", JSON.stringify(postHashtags));
 
   try {
-    const res = await fetch("http://localhost:5000/api/posts", {
+    const res = await fetch(`${API_URL}/api/posts`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
@@ -156,7 +156,7 @@ const handleDeletePost = async (postId) => {
   if (!confirmDelete) return;
 
   try {
-    const res = await fetch(`http://localhost:5000/api/posts/${postId}`, {
+    const res = await fetch(`${API_URL}/api/posts/${postId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`
@@ -173,7 +173,7 @@ const handleDeletePost = async (postId) => {
 
 //fetch destinations
 useEffect(() => {
-  fetch("http://localhost:5000/api/destinations")
+  fetch(`${API_URL}/api/destinations`)
     .then(r => r.json())
     .then(data => setDestinations(Array.isArray(data) ? data : []))
     .catch(() => {});
@@ -187,7 +187,7 @@ useEffect(() => {
       setBioInput(storedUser.bio || "");
       setLoading(false);
     } else {
-      fetch(`http://localhost:5000/api/auth/user/${id}`)
+      fetch(`${API_URL}/api/auth/user/${id}`)
         .then(r => r.json())
         .then(data => { setProfile(data); setBioInput(data.bio || ""); setLoading(false); })
         .catch(() => setLoading(false));
@@ -197,7 +197,7 @@ useEffect(() => {
   // Fetch posts
   useEffect(() => {
     if (!profileId) return;
-    fetch(`http://localhost:5000/api/posts/user/${profileId}`, {
+    fetch(`${API_URL}/api/posts/user/${profileId}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     })
       .then(r => r.json())
@@ -208,7 +208,7 @@ useEffect(() => {
   // Fetch companion status (public profiles only)
   useEffect(() => {
     if (isOwnProfile || !token || !id) return;
-    fetch(`http://localhost:5000/api/companions/status/${id}`, {
+    fetch(`${API_URL}/api/companions/status/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
@@ -219,7 +219,7 @@ useEffect(() => {
   // Fetch companions count
   useEffect(() => {
     if (!token) return;
-    fetch(`http://localhost:5000/api/companions`, {
+    fetch(`${API_URL}/api/companions`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
@@ -230,7 +230,7 @@ useEffect(() => {
   // Fetch favorites count
   useEffect(() => {
     if (!token) return;
-    fetch(`http://localhost:5000/api/favorites`, {
+    fetch(`${API_URL}/api/favorites`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(r => r.json())
@@ -245,7 +245,7 @@ useEffect(() => {
     const formData = new FormData();
     formData.append("profile_pic", file);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/upload-profile-pic", {
+      const res = await fetch(`${API_URL}/api/auth/upload-profile-pic`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -262,7 +262,7 @@ useEffect(() => {
 
   const handleSaveBio = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/update-bio", {
+      const res = await fetch(`${API_URL}/api/auth/update-bio`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -285,27 +285,27 @@ useEffect(() => {
     try {
       let res;
       if (action === "request") {
-        res = await fetch(`http://localhost:5000/api/companions/request/${id}`, {
+        res = await fetch(`${API_URL}/api/companions/request/${id}`, {
           method: "POST", headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) { setCompanionStatus("pending"); setIsSender(true); }
 } else if (action === "cancel") {
-  res = await fetch(`http://localhost:5000/api/companions/remove/${id}`, {
+  res = await fetch(`${API_URL}/api/companions/remove/${id}`, {
     method: "DELETE", headers: { Authorization: `Bearer ${token}` }
   });
   if (res.ok) { setCompanionStatus("none"); }
 } else if (action === "remove") {
-  res = await fetch(`http://localhost:5000/api/companions/remove/${id}`, {
+  res = await fetch(`${API_URL}/api/companions/remove/${id}`, {
     method: "DELETE", headers: { Authorization: `Bearer ${token}` }
   });
   if (res.ok) { setCompanionStatus("none"); }
 } else if (action === "accept") {
-        res = await fetch(`http://localhost:5000/api/companions/accept/${id}`, {
+        res = await fetch(`${API_URL}/api/companions/accept/${id}`, {
           method: "POST", headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) { setCompanionStatus("accepted"); }
       } else if (action === "reject") {
-        res = await fetch(`http://localhost:5000/api/companions/reject/${id}`, {
+        res = await fetch(`${API_URL}/api/companions/reject/${id}`, {
           method: "POST", headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) { setCompanionStatus("none"); }

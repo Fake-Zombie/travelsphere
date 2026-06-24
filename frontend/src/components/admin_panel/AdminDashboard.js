@@ -6,7 +6,7 @@ import AdminRequests from "./AdminRequests";
 import AdminDestinations from "./AdminDestinations";
 import AdminPayments from "./AdminPayments";
 import "./admin_panel.css";
-
+import { API_URL } from "../../services/api";
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [stats, setStats] = useState(null);
@@ -24,12 +24,12 @@ function AdminDashboard() {
       const headers = { Authorization: `Bearer ${token}` };
 
       const [usersRes, guidesRes, appsRes, destRes, requestsRes, payoutsRes] = await Promise.all([
-        fetch("http://localhost:5000/api/admin/users", { headers }),
-        fetch("http://localhost:5000/api/admin/guides", { headers }),
-        fetch("http://localhost:5000/api/guides/applications", { headers }),
-        fetch("http://localhost:5000/api/destinations", { headers }),
-        fetch("http://localhost:5000/api/requests", { headers }),
-        fetch("http://localhost:5000/api/admin/payment-bookings/pending", { headers })
+        fetch(`${API_URL}/api/admin/users`, { headers }),
+        fetch(`${API_URL}/api/admin/guides`, { headers }),
+        fetch(`${API_URL}/api/guides/applications`, { headers }),
+        fetch(`${API_URL}/api/destinations`, { headers }),
+        fetch(`${API_URL}/api/requests`, { headers }),
+        fetch(`${API_URL}/api/admin/payment-bookings/pending`, { headers })
       ]);
 
       const users = usersRes.ok ? await usersRes.json() : [];

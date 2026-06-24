@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-
+import { API_URL } from "../services/api";
 const SocketContext = createContext(null);
 
 export const SocketProvider = ({ user, children, onCounts }) => {
@@ -17,7 +17,7 @@ export const SocketProvider = ({ user, children, onCounts }) => {
   useEffect(() => {
     if (!user?._id) return;
 
-    const sock = io("http://localhost:5000", {
+    const sock = io(API_URL, {
       transports: ["websocket"],
     });
     socketRef.current = sock;

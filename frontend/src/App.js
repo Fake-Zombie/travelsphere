@@ -21,7 +21,7 @@ import NotificationToast from "./components/NotificationToast";
 import MyBookings from "./components/MyBookings";
 import GuideBookingRequests from './components/guide_panel/GuideBookingRequests';
 import PendingPayments from './components/PendingPayments';
-
+import { API_URL } from "./services/api";
 // ── Read auth state synchronously so socket connects on first render ──────────
 function getInitialAuth() {
   try {
@@ -55,7 +55,7 @@ function App() {
 
   // Fetch destinations
   useEffect(() => {
-    fetch("http://localhost:5000/api/destinations")
+    fetch(`${API_URL}/api/destinations`)
       .then((res) => res.json())
       .then((data) => { setDestinations(data); setLoading(false); })
       .catch((err) => { console.error(err); setLoading(false); });
@@ -66,7 +66,7 @@ useEffect(() => {
   if (loggedIn !== true) return;
   const fetchFavorites = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/favorites", {
+      const res = await fetch(`${API_URL}/api/favorites`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const data = await res.json();
@@ -104,7 +104,7 @@ if (seenIds.length === 0) {
     if (!user) { alert("You must be logged in to like a destination!"); return; }
     const isAlreadyFavorite = favorites.includes(destinationId);
     try {
-      const res = await fetch(`http://localhost:5000/api/favorites/${destinationId}`, {
+      const res = await fetch(`${API_URL}/api/favorites/${destinationId}`, {
         method: isAlreadyFavorite ? "DELETE" : "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });

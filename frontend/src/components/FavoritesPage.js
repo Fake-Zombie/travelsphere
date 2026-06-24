@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import DestinationCard from "./DestinationCard";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/favorites.css";
+import { API_URL } from "../services/api";
 
 function FavoritesPage({ destinations, favorites, toggleFavorite }) {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { API_URL } from "../../services/api";
 function Stars({ rating, interactive = false, onRate }) {
   const [hover, setHover] = React.useState(0);
   
@@ -41,14 +41,14 @@ function DestinationPageLeft({
       }
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/api/posts/destination/${dest._id}`, {
+        const res = await fetch(`${API_URL}/api/posts/destination/${dest._id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {
           const posts = await res.json();
           const images = posts.map(post => ({
             id: post._id,
-            src: `http://localhost:5000/static/post_images/${post.image}`,
+            src: `${API_URL}/static/post_images/${post.image}`,
             alt: `Post by ${post.author?.username || 'user'}`,
             author: post.author?.username
           }));
@@ -104,7 +104,7 @@ function DestinationPageLeft({
     formData.append('hashtags', JSON.stringify([]));
 
     try {
-      const res = await fetch('http://localhost:5000/api/posts', {
+      const res = await fetch(`${API_URL}/api/posts`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: formData
@@ -115,7 +115,7 @@ function DestinationPageLeft({
         // Add to photo grid immediately
         const newPhoto = {
           id: newPost._id,
-          src: `http://localhost:5000/static/post_images/${newPost.image}`,
+          src: `${API_URL}/static/post_images/${newPost.image}`,
           alt: `Post by ${newPost.author?.username || 'you'}`,
           author: newPost.author?.username
         };
