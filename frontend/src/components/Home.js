@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import DestinationCard from './DestinationCard';
 import '../assets/css/home.css';
 import { useNavigate, useLocation } from "react-router-dom";
-import auroraVideo from '../assets/videos/aurora.mp4';
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Toast from './toast/Toast';
 import { useToast } from './toast/useToast';
+
+const auroraVideo = "https://res.cloudinary.com/dzxgqrpnp/video/upload/v1782279298/aurora_fnknkn.mp4";
 
 
 

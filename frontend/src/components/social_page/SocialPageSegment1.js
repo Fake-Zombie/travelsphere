@@ -507,7 +507,7 @@ function SocialFeed() {
                 {post.image && (
                   <div className="post-img-wrap">
                     <img
-                      src={`http://localhost:5000/static/post_images/${post.image}`}
+                     src={post.image}
                       alt="post"
                       className="post-img"
                     />

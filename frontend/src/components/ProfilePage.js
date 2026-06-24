@@ -614,7 +614,7 @@ if (companionStatus === "pending" && isSender) return (
 )}
             {post.image && (
               <img
-                src={`http://localhost:5000/static/post_images/${post.image}`}
+                src={post.image}
                 alt="post"
                 className="pf-post-img"
               />

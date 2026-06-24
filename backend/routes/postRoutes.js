@@ -17,7 +17,7 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
     const post = await Post.create({
       author: req.user.id,
       text: text || "",
-      image: req.file ? req.file.filename : "",
+      image: req.file ? req.file.path : "",
       destinationTag: destinationTag || null,
       hashtags, 
     });
@@ -205,8 +205,7 @@ const newNotif = await Notification.create({
 });
 
 // Delete post (owner or admin)
-const fs = require("fs");
-const path = require("path");
+
 
 router.delete("/:id", auth, async (req, res) => {
   try {
@@ -219,13 +218,12 @@ router.delete("/:id", auth, async (req, res) => {
     if (!isOwner && !isAdmin)
       return res.status(403).json({ message: "Not authorized" });
 
-    // delete image file also
-    if (post.image) {
-      const imagePath = path.join(__dirname, "../uploads/post_images", post.image);
-      fs.unlink(imagePath, (err) => {
-        if (err) console.log("Image delete error:", err.message);
-      });
-    }
+    // delete image from Cloudinary
+if (post.image) {
+  const cloudinary = require("../config/cloudinary");
+  const publicId = post.image.split("/").slice(-1)[0].split(".")[0];
+  await cloudinary.uploader.destroy(`travelsphere/post_images/${publicId}`);
+}
 
     await post.deleteOne();
 
