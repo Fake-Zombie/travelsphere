@@ -145,7 +145,7 @@ function DestinationPageLeft({
       {/* Main Image */}
       <div className="dp-main-image-wrap">
         <img
-          src={{dest.image?.startsWith("http") ? dest.image : {dest.image?.startsWith("http") ? dest.image : `${API_URL}${dest.image}`}}}
+          src={dest.image?.startsWith("http") ? dest.image : `${API_URL}${dest.image}`}
           alt={dest.name}
           className="dp-main-img"
           onError={e => e.target.src = `${API_URL}/static/uploads/country_pics/default.jpg`}
