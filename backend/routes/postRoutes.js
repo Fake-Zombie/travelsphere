@@ -218,11 +218,21 @@ router.delete("/:id", auth, async (req, res) => {
     if (!isOwner && !isAdmin)
       return res.status(403).json({ message: "Not authorized" });
 
-    // delete image from Cloudinary
+   // delete image from Cloudinary
 if (post.image) {
-  const cloudinary = require("../config/cloudinary");
-  const publicId = post.image.split("/").slice(-1)[0].split(".")[0];
-  await cloudinary.uploader.destroy(`travelsphere/post_images/${publicId}`);
+  try {
+    const cloudinary = require("../config/cloudinary");
+    // Extract full public_id including folder: "travelsphere/post_images/filename"
+    const urlParts = post.image.split("/");
+    const filenameWithExt = urlParts[urlParts.length - 1];
+    const filename = filenameWithExt.split(".")[0];
+    const folder = urlParts[urlParts.length - 2];
+    const publicId = `${folder}/${filename}`;
+    await cloudinary.uploader.destroy(publicId);
+  } catch (cloudErr) {
+    console.warn("Cloudinary delete failed:", cloudErr.message);
+    // Don't crash — still delete the post from DB
+  }
 }
 
     await post.deleteOne();
