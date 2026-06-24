@@ -198,7 +198,7 @@ function AdminDestinations() {
                                     src={`${API_URL}${dest.image}`}
                                     alt={dest.name}
                                     className="ad-thumb"
-                                    onError={(e) => { e.target.src = "/static/uploads/country_pics/default.jpg"; }}
+                                    onError={(e) => { e.target.src = `${API_URL}/static/uploads/country_pics/default.jpg`; }}
                                 />
                                 <div className="ad-item-info">
                                     <span className="ad-item-name">{dest.name}</span>
@@ -229,7 +229,7 @@ function AdminDestinations() {
                             src={`${API_URL}${selected.image}`}
                             alt={selected.name}
                             className="ad-detail-img"
-                            onError={(e) => { e.target.src = "/static/uploads/country_pics/default.jpg"; }}
+                            onError={(e) => { e.target.src = `${API_URL}/static/uploads/country_pics/default.jpg`; }}
                         />
                         <div className="ad-detail-content">
                             <div className="ad-detail-top">

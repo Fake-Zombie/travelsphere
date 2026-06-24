@@ -25,7 +25,7 @@ function DestinationCard({
         src={{image?.startsWith("http") ? image : `${API_URL}${image}`}}
         alt={name}
         onError={(e) => {
-          e.target.src = "/static/uploads/country_pics/default.jpg";
+          e.target.src = `${API_URL}/static/uploads/country_pics/default.jpg`;
         }}
       />
 

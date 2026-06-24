@@ -148,7 +148,7 @@ function DestinationPageLeft({
           src={{dest.image?.startsWith("http") ? dest.image : {dest.image?.startsWith("http") ? dest.image : `${API_URL}${dest.image}`}}}
           alt={dest.name}
           className="dp-main-img"
-          onError={e => e.target.src = '/static/uploads/country_pics/default.jpg'}
+          onError={e => e.target.src = `${API_URL}/static/uploads/country_pics/default.jpg`}
         />
 
         {/* Bottom left — Location + Type */}
