@@ -243,7 +243,7 @@ export default function About() {
       <section className="about-team">
         <div className="about-team__header reveal">
           <span className="section-label">The Builder</span>
-          <h2 className="section-heading">One person,<br />one big idea</h2>
+          <h2 className="section-heading">One person</h2>
           <p className="about-team__subtitle">
             TravelSphere was designed, built, and shipped solo — every line of code, every pixel.
           </p>
@@ -257,13 +257,25 @@ export default function About() {
               <h3 className="founder-card__name">Ankur Rajak</h3>
               <p className="founder-card__role">Founder & Full-Stack Developer</p>
               <p className="founder-card__bio">
-                Built TravelSphere as a college project that grew into a real platform.
+                Built TravelSphere as a college project.
                 Passionate about connecting travelers with local guides and crafting
                 experiences that feel genuinely human — one feature at a time.
               </p>
               <div className="team-card__links">
-                <a href="#" className="team-link" title="LinkedIn">in</a>
-                <a href="#" className="team-link" title="GitHub">⌥</a>
+                <a
+    href="https://www.linkedin.com/in/ankur-rajak-089b18395/"
+    className="team-link"
+    title="LinkedIn"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    in
+  </a>
+                <a href="https://github.com/Fake-Zombie"
+    className="team-link"
+    title="GitHub"
+    target="_blank"
+    rel="noopener noreferrer">⌥</a>
               </div>
             </div>
           </div>
@@ -275,7 +287,7 @@ export default function About() {
         <div className="about-how__inner">
           <div className="about-how__header reveal">
             <span className="section-label">How It Works</span>
-            <h2 className="section-heading">From curiosity to<br />unforgettable memory</h2>
+            <h2 className="section-heading">From curiosity</h2>
           </div>
 
           <div className="about-how__steps">
