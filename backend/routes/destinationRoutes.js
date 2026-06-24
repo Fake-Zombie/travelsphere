@@ -1,16 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const Destination = require("../models/Destination");
-const multer = require("multer");
-const path = require("path");
 const { protect } = require("../middleware/authMiddleware");
 const { adminOnly } = require("../middleware/adminMiddleware");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/destinations/"),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const { cloudinary } = require("../config/cloudinary");
+const multer = require("multer");
+const destStorage = new CloudinaryStorage({
+  cloudinary,
+  params: { folder: "travelsphere/destinations", allowed_formats: ["jpg", "jpeg", "png"] },
 });
-const upload = multer({ storage });
+const upload = multer({ storage: destStorage });
 
 // Get all destinations
 router.get("/", async (req, res) => {
@@ -42,7 +43,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", protect, adminOnly, upload.single("image"), async (req, res) => {
   try {
     const { name, country, description, type, bestTimeMonths, bestTimeReason } = req.body;
-    const image = `/static/destinations/${req.file.filename}`;
+    const image = req.file.path;
     const dest = await Destination.create({
       name, country, description, type, image,
       bestTimeToVisit: {
@@ -66,7 +67,7 @@ router.put("/:id", protect, adminOnly, upload.single("image"), async (req, res) 
         reason: bestTimeReason || "",
       }
     };
-    if (req.file) updates.image = `/static/destinations/${req.file.filename}`;
+    if (req.file) updates.image = req.file.path;
     const dest = await Destination.findByIdAndUpdate(req.params.id, updates, { new: true });
     res.json(dest);
   } catch (err) {
