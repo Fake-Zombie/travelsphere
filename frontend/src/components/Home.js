@@ -424,7 +424,10 @@ const moodFiltered = selectedMood === ""
           }}
         >
           <div className="suggestion-image">
-            <img src={dest.image} alt={dest.name} />
+            <img
+  src={dest.image?.startsWith("http") ? dest.image : `${API_URL}${dest.image}`}
+  alt={dest.name}
+/>
           </div>
 
           <div className="suggestion-content">
