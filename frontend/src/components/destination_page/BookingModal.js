@@ -18,6 +18,18 @@ function BookingModal({ isOpen, onClose, guideId, destinationId, guideName, onSu
   // ... validation code ...
 
   setError('');
+  if (formData.startDate < today) {
+  setError('Start date cannot be in the past.');
+  return;
+}
+if (formData.endDate < today) {
+  setError('End date cannot be in the past.');
+  return;
+}
+if (formData.endDate < formData.startDate) {
+  setError('End date cannot be before start date.');
+  return;
+}
   setLoading(true);
 
   try {
@@ -88,7 +100,10 @@ function BookingModal({ isOpen, onClose, guideId, destinationId, guideName, onSu
             type="date"
             min={today}
             value={formData.startDate}
-            onChange={e => setFormData({ ...formData, startDate: e.target.value })}
+            onChange={e => {
+  if (e.target.value < today) return;
+  setFormData({ ...formData, startDate: e.target.value });
+}}
             disabled={loading}
           />
         </div>
@@ -99,7 +114,10 @@ function BookingModal({ isOpen, onClose, guideId, destinationId, guideName, onSu
             type="date"
             min={today}
             value={formData.endDate}
-            onChange={e => setFormData({ ...formData, endDate: e.target.value })}
+            onChange={e => {
+  if (e.target.value < today) return;
+  setFormData({ ...formData, endDate: e.target.value });
+}}
             disabled={loading}
           />
         </div>
