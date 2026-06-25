@@ -48,7 +48,7 @@ function DestinationPageLeft({
           const posts = await res.json();
           const images = posts.map(post => ({
             id: post._id,
-            src: `${API_URL}/static/post_images/${post.image}`,
+            src: post.image?.startsWith("http") ? post.image : `${API_URL}/static/post_images/${post.image}`,
             alt: `Post by ${post.author?.username || 'user'}`,
             author: post.author?.username
           }));
@@ -115,7 +115,7 @@ function DestinationPageLeft({
         // Add to photo grid immediately
         const newPhoto = {
           id: newPost._id,
-          src: `${API_URL}/static/post_images/${newPost.image}`,
+src: newPost.image?.startsWith("http") ? newPost.image : `${API_URL}/static/post_images/${newPost.image}`,
           alt: `Post by ${newPost.author?.username || 'you'}`,
           author: newPost.author?.username
         };
