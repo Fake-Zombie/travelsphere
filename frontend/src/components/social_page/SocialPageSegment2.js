@@ -83,30 +83,37 @@ function SocialCompanions({ onOpenChat, onPendingCount }) {
     }, 350);
   }, [searchQuery]);
 
-  const handleSendRequest = async (userId) => {
-    try {
-      const res = await fetch(
-        `${API_URL}/api/companions/request/${userId}`,
-        { method: "POST", headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (res.ok) setRequestSent((prev) => ({ ...prev, [userId]: true }));
-    } catch (err) {
-      console.error(err);
+  // Replace handleSendRequest
+const handleSendRequest = async (userId) => {
+  try {
+    const res = await fetch(`${API_URL}/api/companions/request/${userId}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      setRequestSent((prev) => ({ ...prev, [userId]: true }));
+      fetchAll(); // refresh companionIds + pendingIds so getSearchAction re-evaluates
     }
-  };
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-  const handleCancelRequest = async (userId) => {
-    try {
-      const res = await fetch(
-        `${API_URL}/api/companions/cancel/${userId}`,
-        { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (res.ok) setRequestSent((prev) => ({ ...prev, [userId]: false }));
-    } catch (err) {
-      console.error(err);
+// Replace handleCancelRequest
+const handleCancelRequest = async (userId) => {
+  try {
+    const res = await fetch(`${API_URL}/api/companions/cancel/${userId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      setRequestSent((prev) => ({ ...prev, [userId]: false }));
+      fetchAll(); // refresh so pill/button updates
     }
-  };
-
+  } catch (err) {
+    console.error(err);
+  }
+};
   const handleAccept = async (senderId) => {
     await fetch(`${API_URL}/api/companions/accept/${senderId}`, {
       method: "POST",

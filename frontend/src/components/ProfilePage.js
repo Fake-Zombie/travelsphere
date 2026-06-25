@@ -216,16 +216,7 @@ useEffect(() => {
       .catch(() => {});
   }, [id]);
 
-  // Fetch companions count
-  useEffect(() => {
-    if (!token) return;
-    fetch(`${API_URL}/api/companions`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(r => r.json())
-      .then(data => setCompanionsCount(Array.isArray(data) ? data.length : 0))
-      .catch(() => {});
-  }, []);
+
 
   // Fetch favorites count
   useEffect(() => {
@@ -280,40 +271,60 @@ useEffect(() => {
     } catch (err) { console.error(err); }
   };
 
-  const handleCompanionAction = async (action) => {
-    setCompanionLoading(true);
-    try {
-      let res;
-      if (action === "request") {
-        res = await fetch(`${API_URL}/api/companions/request/${id}`, {
-          method: "POST", headers: { Authorization: `Bearer ${token}` }
-        });
-        if (res.ok) { setCompanionStatus("pending"); setIsSender(true); }
-} else if (action === "cancel") {
-  res = await fetch(`${API_URL}/api/companions/remove/${id}`, {
-    method: "DELETE", headers: { Authorization: `Bearer ${token}` }
-  });
-  if (res.ok) { setCompanionStatus("none"); }
-} else if (action === "remove") {
-  res = await fetch(`${API_URL}/api/companions/remove/${id}`, {
-    method: "DELETE", headers: { Authorization: `Bearer ${token}` }
-  });
-  if (res.ok) { setCompanionStatus("none"); }
-} else if (action === "accept") {
-        res = await fetch(`${API_URL}/api/companions/accept/${id}`, {
-          method: "POST", headers: { Authorization: `Bearer ${token}` }
-        });
-        if (res.ok) { setCompanionStatus("accepted"); }
-      } else if (action === "reject") {
-        res = await fetch(`${API_URL}/api/companions/reject/${id}`, {
-          method: "POST", headers: { Authorization: `Bearer ${token}` }
-        });
-        if (res.ok) { setCompanionStatus("none"); }
-      }
-    } catch (err) { console.error(err); }
-    finally { setCompanionLoading(false); }
-  };
+ // Replace the companions count useEffect + add fetchCompanionsCount helper
+const fetchCompanionsCount = useCallback(async () => {
+  if (!token) return;
+  try {
+    const res = await fetch(`${API_URL}/api/companions`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await res.json();
+    // Only count accepted companions (status === "accepted" entries)
+    setCompanionsCount(Array.isArray(data) ? data.length : 0);
+  } catch {}
+}, [token]);
 
+useEffect(() => {
+  fetchCompanionsCount();
+}, [fetchCompanionsCount]);
+
+// Replace handleCompanionAction — call fetchCompanionsCount at the end
+const handleCompanionAction = async (action) => {
+  setCompanionLoading(true);
+  try {
+    let res;
+    if (action === "request") {
+      res = await fetch(`${API_URL}/api/companions/request/${id}`, {
+        method: "POST", headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) { setCompanionStatus("pending"); setIsSender(true); }
+     } else if (action === "cancel") {
+      res = await fetch(`${API_URL}/api/companions/cancel/${id}`, {
+        method: "DELETE", headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) { setCompanionStatus("none"); }
+    } else if (action === "remove") {
+      res = await fetch(`${API_URL}/api/companions/remove/${id}`, {
+        method: "DELETE", headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) { setCompanionStatus("none"); }
+    } else if (action === "accept") {
+      res = await fetch(`${API_URL}/api/companions/accept/${id}`, {
+        method: "POST", headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) { setCompanionStatus("accepted"); }
+    } else if (action === "reject") {
+      res = await fetch(`${API_URL}/api/companions/reject/${id}`, {
+        method: "POST", headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) { setCompanionStatus("none"); }
+    }
+  } catch (err) { console.error(err); }
+  finally {
+    setCompanionLoading(false);
+    fetchCompanionsCount(); // always re-fetch count after any action
+  }
+};
   const renderCompanionButton = () => {
     if (isOwnProfile || !token) return null;
     if (profile?.role === "guide") return null;
